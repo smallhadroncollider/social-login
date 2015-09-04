@@ -1,0 +1,17 @@
+{
+	"name": "social-login",
+	"description": "Social Login Provider",
+	"type": "project",
+	"require": {
+		"league/oauth1-client": "~1.6",
+		"league/oauth2-client": "~1.0"
+	},
+    "autoload": {
+        "psr-4": {
+            "SmallHadronCollider\\SocialLogin\\": "src/"
+        }
+    },
+	"config": {
+		"preferred-install": "dist"
+	}
+}
