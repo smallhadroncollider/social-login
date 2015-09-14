@@ -2,13 +2,20 @@
 
 namespace SmallHadronCollider\SocialLogin\Platforms\Two;
 
+use League\OAuth2\Client\Provider\AbstractProvider;
+
 use SmallHadronCollider\SocialLogin\Platforms\AbstractPlatform as Platform;
-use SmallHadronCollider\SocialLogin\Contract\PlatformInterface;
+use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\User;
 
 abstract class AbstractPlatform extends Platform implements PlatformInterface
 {
-    protected $provider;
+    public $provider;
+
+    public function __construct(AbstractProvider $provider)
+    {
+        $this->provider = $provider;
+    }
 
     public function getAuthUrl()
     {

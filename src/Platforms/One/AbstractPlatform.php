@@ -2,12 +2,19 @@
 
 namespace SmallHadronCollider\SocialLogin\Platforms\One;
 
-use SmallHadronCollider\SocialLogin\Contract\PlatformInterface;
+use League\OAuth1\Client\Server\Server;
+use SmallHadronCollider\SocialLogin\Platforms\AbstractPlatform as Platform;
+use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\User;
 
-abstract class AbstractPlatform implements PlatformInterface
+abstract class AbstractPlatform extends Platform implements PlatformInterface
 {
     protected $server;
+
+    public function __construct(Server $server)
+    {
+        $this->server = $server;
+    }
 
     public function getAuthUrl()
     {
@@ -41,6 +48,6 @@ abstract class AbstractPlatform implements PlatformInterface
     protected function storeTokenCredentials($tokenCredentials)
     {
         $userID = $this->server->getUserUid($tokenCredentials);
-        $this->tokenStorer->storeToken("{$this->platform}.{$userID}", serialize($tokenCredentials));
+        $this->storer->store("{$this->platform}.{$userID}", serialize($tokenCredentials));
     }
 }

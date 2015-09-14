@@ -2,7 +2,8 @@
 
 namespace SmallHadronCollider\SocialLogin\Platforms;
 
-use SmallHadronCollider\SocialLogin\Contract\PlatformInterface;
+use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
+use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 use SmallHadronCollider\SocialLogin\User;
 
 abstract class AbstractPlatform
