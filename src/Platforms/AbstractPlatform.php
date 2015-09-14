@@ -16,4 +16,10 @@ abstract class AbstractPlatform
     {
         $this->sessionID = $sessionID;
     }
+
+    public function setStorer(StorerInterface $storer)
+    {
+        $this->storer = $storer;
+        return $this;
+    }
 }
