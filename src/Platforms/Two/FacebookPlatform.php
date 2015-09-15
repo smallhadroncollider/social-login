@@ -23,13 +23,16 @@ class FacebookPlatform extends AbstractPlatform implements PlatformInterface
 
     protected function getUserID($resourceOwner)
     {
+        return $resourceOwner->getId();
     }
 
     protected function getUserName($resourceOwner)
     {
+        return $resourceOwner->getName();
     }
 
     protected function getUserEmail($resourceOwner)
     {
+        return $resourceOwner->getEmail();
     }
 }
