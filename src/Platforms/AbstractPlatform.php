@@ -10,10 +10,17 @@ abstract class AbstractPlatform
 {
     protected $storer;
     protected $platform;
+    protected $sessionID;
 
     public function setStorer(StorerInterface $storer)
     {
         $this->storer = $storer;
+        return $this;
+    }
+
+    public function setSessionID($sessionID)
+    {
+        $this->sessionID = $sessionID;
         return $this;
     }
 }

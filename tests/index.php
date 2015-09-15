@@ -28,7 +28,7 @@ $twitter = $login->platform("twitter");
 if (isset($_GET["platform"])) {
     switch ($_GET["platform"]) {
         case "facebook":
-            $facebook->setAuthCode($_GET["code"]);
+            $facebook->setAuthCode("{$_GET["code"]}:{$_GET["state"]}");
             break;
 
         case "twitter":

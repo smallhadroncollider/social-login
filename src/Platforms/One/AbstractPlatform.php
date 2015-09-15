@@ -10,17 +10,10 @@ use SmallHadronCollider\SocialLogin\User;
 abstract class AbstractPlatform extends Platform implements PlatformInterface
 {
     protected $server;
-    protected $sessionID;
 
     public function __construct(Server $server)
     {
         $this->server = $server;
-    }
-
-    public function setSessionID($sessionID)
-    {
-        $this->sessionID = $sessionID;
-        return $this;
     }
 
     public function getAuthUrl()
@@ -32,9 +25,9 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function setAuthCode($code)
     {
-        $tokens = explode(":", $code);
+        list($token, $verifier) = explode(":", $code);
         $temporaryCredentials = unserialize($this->storer->get("{$this->platform}.{$this->sessionID}.temporary"));
-        $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $tokens[0], $tokens[1]);
+        $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $token, $verifier);
 
         $this->storeTokenCredentials($tokenCredentials);
     }

@@ -17,11 +17,15 @@ class SocialLogin
         $sessionID
     ) {
         if (array_key_exists("facebook", $config)) {
-            $this->platforms["facebook"] = $this->getFacebookPlatform($config["facebook"])->setStorer($storer);
+            $this->platforms["facebook"] = $this->getFacebookPlatform($config["facebook"]);
         }
 
         if (array_key_exists("twitter", $config)) {
-            $this->platforms["twitter"] = $this->getTwitterPlatform($config["twitter"])->setSessionID($sessionID)->setStorer($storer);
+            $this->platforms["twitter"] = $this->getTwitterPlatform($config["twitter"]);
+        }
+
+        foreach ($this->platforms as $platform) {
+            $platform->setSessionID($sessionID)->setStorer($storer);
         }
     }
 
