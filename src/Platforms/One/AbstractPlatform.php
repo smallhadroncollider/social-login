@@ -25,7 +25,7 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         return $this->server->getAuthorizationUrl($temporaryIdentifier);
     }
 
-    public function setAuthCode($code)
+    public function authorizeUser($code)
     {
         $this->checkSessionID();
 
@@ -34,12 +34,24 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $token, $verifier);
 
         $this->storeTokenCredentials($tokenCredentials);
+
+        return $this->createUser($tokenCredentials);
     }
 
     public function getUser($userID)
     {
         $tokenCredentials = unserialize($this->storer->getToken("{$this->platform}.{$userID}"));
+        return $this->createUser($tokenCredentials);
+    }
 
+    protected function storeTokenCredentials($tokenCredentials)
+    {
+        $userID = $this->server->getUserUid($tokenCredentials);
+        $this->storer->store("{$this->platform}.{$userID}", serialize($tokenCredentials));
+    }
+
+    protected function createUser($tokenCredentials)
+    {
         $user = new User();
         $user->setID($this->server->getUserUid($tokenCredentials));
         $user->setName($this->server->getUserScreenName($tokenCredentials));
@@ -47,11 +59,5 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         $user->setProperties($this->server->getUserDetails($tokenCredentials)->extra);
 
         return $user;
-    }
-
-    protected function storeTokenCredentials($tokenCredentials)
-    {
-        $userID = $this->server->getUserUid($tokenCredentials);
-        $this->storer->store("{$this->platform}.{$userID}", serialize($tokenCredentials));
     }
 }

@@ -27,7 +27,7 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         return $authURL;
     }
 
-    public function setAuthCode($code)
+    public function authorizeUser($code)
     {
         $this->checkSessionID();
 
@@ -44,11 +44,25 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         ]);
 
         $this->storeAccessToken($accessToken);
+
+        return $this->createUser($accessToken);
     }
 
     public function getUser($userID)
     {
         $accessToken = unserialize($this->storer->get("{$this->platform}.{$userID}"));
+        return $this->createUser($accessToken);
+    }
+
+    protected function storeAccessToken($accessToken)
+    {
+        $resourceOwner = $this->provider->getResourceOwner($accessToken);
+        $userID = $this->getUserID($resourceOwner);
+        $this->storer->store("{$this->platform}.{$userID}", serialize($accessToken));
+    }
+
+    protected function createUser($accessToken)
+    {
         $resourceOwner = $this->provider->getResourceOwner($accessToken);
 
         $user = new User();
@@ -58,13 +72,6 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         $user->setProperties($resourceOwner->toArray());
 
         return $user;
-    }
-
-    protected function storeAccessToken($accessToken)
-    {
-        $resourceOwner = $this->provider->getResourceOwner($accessToken);
-        $userID = $this->getUserID($resourceOwner);
-        $this->storer->store("{$this->platform}.{$userID}", serialize($accessToken));
     }
 
     abstract protected function getUserID($resourceOwner);
