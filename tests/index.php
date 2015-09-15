@@ -1,12 +1,12 @@
 <?php
 
 date_default_timezone_set("Europe/London");
+namespace SmallHadronCollider\SocialLogin\Tests;
 
 // Load Composer autoload file
 include "../vendor/autoload.php";
 
 use SmallHadronCollider\SocialLogin\SocialLogin;
-use SmallHadronCollider\SocialLogin\Storers\SessionStorer;
 
 // Create new SocialLogin object
 $login = new SocialLogin([

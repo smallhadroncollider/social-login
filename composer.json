@@ -9,7 +9,8 @@
 	},
     "autoload": {
         "psr-4": {
-            "SmallHadronCollider\\SocialLogin\\": "src/"
+            "SmallHadronCollider\\SocialLogin\\": "src/",
+            "SmallHadronCollider\\SocialLogin\\Tests\\": "tests/"
         }
     },
 	"config": {

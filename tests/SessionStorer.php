@@ -1,6 +1,6 @@
 <?php
 
-namespace SmallHadronCollider\SocialLogin\Storers;
+namespace SmallHadronCollider\SocialLogin\Tests;
 
 use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 
@@ -11,6 +11,11 @@ class SessionStorer implements StorerInterface
     public function __construct($sessionID = "social_login")
     {
         session_start();
+
+        echo "<pre>";
+        var_dump($_SESSION);
+        echo "</pre>";
+
         $this->sessionID = $sessionID;
     }
 
