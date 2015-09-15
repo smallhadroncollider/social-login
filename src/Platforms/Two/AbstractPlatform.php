@@ -20,6 +20,8 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function getAuthUrl()
     {
+        $this->checkSessionID();
+
         $authURL = $this->provider->getAuthorizationUrl();
         $this->storer->store("{$this->platform}.{$this->sessionID}.temporary", $this->provider->getState());
         return $authURL;
@@ -27,6 +29,8 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function setAuthCode($code)
     {
+        $this->checkSessionID();
+
         list($code, $state) = explode(":", $code);
 
         $cachedState = $this->storer->get("{$this->platform}.{$this->sessionID}.temporary");

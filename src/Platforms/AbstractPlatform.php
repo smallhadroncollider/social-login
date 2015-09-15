@@ -4,7 +4,7 @@ namespace SmallHadronCollider\SocialLogin\Platforms;
 
 use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
-use SmallHadronCollider\SocialLogin\User;
+use SmallHadronCollider\SocialLogin\Exceptions\SessionIDNotSetException;
 
 abstract class AbstractPlatform
 {
@@ -22,5 +22,12 @@ abstract class AbstractPlatform
     {
         $this->sessionID = $sessionID;
         return $this;
+    }
+
+    protected function checkSessionID()
+    {
+        if (!$this->sessionID) {
+            throw new SessionIDNotSetException();
+        }
     }
 }

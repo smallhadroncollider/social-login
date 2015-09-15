@@ -18,6 +18,8 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function getAuthUrl()
     {
+        $this->checkSessionID();
+
         $temporaryIdentifier = $this->server->getTemporaryCredentials();
         $this->storer->store("{$this->platform}.{$this->sessionID}.temporary", serialize($temporaryIdentifier));
         return $this->server->getAuthorizationUrl($temporaryIdentifier);
@@ -25,6 +27,8 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function setAuthCode($code)
     {
+        $this->checkSessionID();
+
         list($token, $verifier) = explode(":", $code);
         $temporaryCredentials = unserialize($this->storer->get("{$this->platform}.{$this->sessionID}.temporary"));
         $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $token, $verifier);
