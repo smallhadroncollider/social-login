@@ -15,5 +15,8 @@
     },
 	"config": {
 		"preferred-install": "dist"
+	},
+	"require-dev": {
+		"mockery/mockery": "0.9.*"
 	}
 }
