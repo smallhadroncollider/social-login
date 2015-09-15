@@ -108,6 +108,10 @@ if (/* user does not exist in database */) {
     // Create a new user from
     // $user->id, $user->name, $user->email
 }
+
+if (/* user in database has different social id to logged in user */) {
+    // return a 401 page
+}
 ```
 
 - **API**: Send back relevant login details (e.g. email)
