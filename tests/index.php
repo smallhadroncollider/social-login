@@ -1,6 +1,5 @@
 <?php
 
-date_default_timezone_set("Europe/London");
 namespace SmallHadronCollider\SocialLogin\Tests;
 
 // Load Composer autoload file
@@ -26,17 +25,26 @@ $facebook = $login->platform("facebook");
 $twitter = $login->platform("twitter");
 
 if (isset($_GET["platform"])) {
-    switch ($_GET["platform"]) {
-        case "facebook":
-            $facebook->setAuthCode("{$_GET["code"]}:{$_GET["state"]}");
-            break;
+    $platform = $_GET["platform"];
 
-        case "twitter":
-            $twitter->setAuthCode("{$_GET["oauth_token"]}:{$_GET["oauth_verifier"]}");
-            break;
+    if (!isset($_GET["user"])) {
+        switch ($platform) {
+            case "facebook":
+                $user = $facebook->authorizeUser("{$_GET["code"]}:{$_GET["state"]}");
+                break;
+
+            case "twitter":
+                $user = $twitter->authorizeUser("{$_GET["oauth_token"]}:{$_GET["oauth_verifier"]}");
+                break;
+        }
+
+        header("Location: /?platform={$platform}&user={$user->id}");
+    } else {
+        $userID = $_GET["user"];
+        $user = $login->platform($_GET["platform"])->getUser($userID);
+
+        echo $user->name;
     }
-
-    header("Location: /");
 
 } else {
 
