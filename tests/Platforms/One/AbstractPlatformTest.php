@@ -70,19 +70,4 @@ class AbstractPlatformTest extends TestCase
 class TestPlatform extends AbstractPlatform
 {
     protected $platform = "test";
-
-    protected function getUserID($resourceOwner)
-    {
-        return $resourceOwner->id();
-    }
-
-    protected function getUserName($resourceOwner)
-    {
-        return $resourceOwner->name();
-    }
-
-    protected function getUserEmail($resourceOwner)
-    {
-        return $resourceOwner->email();
-    }
 }
