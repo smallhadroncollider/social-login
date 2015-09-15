@@ -11,14 +11,17 @@ class SocialLogin
 {
     private $platforms = [];
 
-    public function __construct(array $config, StorerInterface $storer)
-    {
+    public function __construct(
+        array $config,
+        StorerInterface $storer,
+        $sessionID
+    ) {
         if (array_key_exists("facebook", $config)) {
             $this->platforms["facebook"] = $this->getFacebookPlatform($config["facebook"])->setStorer($storer);
         }
 
         if (array_key_exists("twitter", $config)) {
-            $this->platforms["twitter"] = $this->getTwitterPlatform($config["twitter"])->setStorer($storer);
+            $this->platforms["twitter"] = $this->getTwitterPlatform($config["twitter"])->setSessionID($sessionID)->setStorer($storer);
         }
     }
 

@@ -20,7 +20,7 @@ $login = new SocialLogin([
         "client_secret" => "WzjqBn0ZWcpNbReaYLxR3OmkM5QP9Dsu64s4rfbjYBkVK5RbVc",
         "redirect_url" => "http://localhost:8080/?platform=twitter",
     ],
-], new SessionStorer);
+], new SessionStorer, session_id());
 
 $facebook = $login->platform("facebook");
 $twitter = $login->platform("twitter");
