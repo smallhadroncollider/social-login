@@ -40,7 +40,7 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function getUser($userID)
     {
-        $tokenCredentials = unserialize($this->storer->getToken("{$this->platform}.{$userID}"));
+        $tokenCredentials = unserialize($this->storer->get("{$this->platform}.{$userID}"));
         return $this->createUser($tokenCredentials);
     }
 
