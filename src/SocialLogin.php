@@ -38,6 +38,14 @@ class SocialLogin
         throw new InvalidPlatformException($platform);
     }
 
+    public function platformFromToken($token)
+    {
+        preg_match("/^([a-z]+):/", $token, $matches);
+        $platform = $matches[1];
+
+        return $this->platform($platform);
+    }
+
     public function getAuthUrls()
     {
         return array_map(function ($platform) {

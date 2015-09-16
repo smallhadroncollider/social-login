@@ -24,6 +24,16 @@ abstract class AbstractPlatform
         return $this;
     }
 
+    public function addPlatform($token)
+    {
+        return "{$this->platform}:{$token}";
+    }
+
+    public function stripPlatform($token)
+    {
+        return preg_replace("/^{$this->platform}:/", "", $token);
+    }
+
     protected function checkSessionID()
     {
         if (!$this->sessionID) {
