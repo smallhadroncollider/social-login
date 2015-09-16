@@ -13,8 +13,7 @@ class SocialLogin
 
     public function __construct(
         array $config,
-        StorerInterface $storer,
-        $sessionID
+        StorerInterface $storer
     ) {
         if (array_key_exists("facebook", $config)) {
             $this->platforms["facebook"] = $this->getFacebookPlatform($config["facebook"]);
@@ -25,8 +24,17 @@ class SocialLogin
         }
 
         foreach ($this->platforms as $platform) {
-            $platform->setSessionID($sessionID)->setStorer($storer);
+            $platform->setStorer($storer);
         }
+    }
+
+    public function setSessionID($sessionID)
+    {
+        foreach ($this->platforms as $platform) {
+            $platform->setSessionID($sessionID);
+        }
+
+        return $this;
     }
 
     public function platform($platform)
