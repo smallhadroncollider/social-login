@@ -46,8 +46,8 @@ $config = [
 
 $storer = new MemcachedStorer();
 
-$sessionID = $_GET["session_id"];
-$login = new SocialLogin($config, $storer, $sessionID);
+$login = new SocialLogin($config, $storer);
+$login->setSessionID($_GET["session_id"]);
 
 return json_encode($login->getAuthUrls());
 ```
@@ -87,11 +87,13 @@ $userDetails = $http->post("https://api.mysite.com/v1/auth/social", [
  */
 
 // Setup SocialLogin as before... (see above)
-$login = new SocialLogin($config, $storer, $_POST["session_id"]);
+$login = (new SocialLogin($config, $storer))->setSessionID($_POST["session_id"]);
 
 $code = $_POST["code"];
-$platform = $_POST["platform"];
-$user = $login->platform($platform)->authorizeUser($code);
+
+$platform = $login->platform($_POST["platform"]);
+$token = $platform->getTokenFromCode($code);
+$user = $platform->getTokenFromCode($code);
 ```
 
 - **API**: Check if user exists in user database
@@ -101,8 +103,6 @@ $user = $login->platform($platform)->authorizeUser($code);
 /*
  * POST https://api.mysite.com/v1/auth/social
  */
-
-$email = $user->email;
 
 if (/* user does not exist in database */) {
     // Create a new user from
@@ -114,7 +114,7 @@ if (/* user in database has different social id to logged in user */) {
 }
 ```
 
-- **API**: Send back relevant login details (e.g. email)
+- **API**: Send back user id and token with platform prepended
 
 ```php
 /*
@@ -123,7 +123,7 @@ if (/* user in database has different social id to logged in user */) {
 
 return json_encode([
     "user_id" => $user->id,
-    "user_email" => $user->email,
+    "token" => $platform->addPlatform($token),
 ]);
 ```
 
@@ -138,8 +138,8 @@ $loggedIn = $http->post("https://api.mysite.com/v1/auth", [
     "client_id" => "oauthclientid",
     "client_secret" => "blahblahblah",
     "grant_type" => "password",
-    "username" => $userDetails->email,
-    "password" => $sessionID,
+    "username" => $userDetails->user_id,
+    "password" => $userDetails->token,
 ]);
 ```
 
@@ -151,9 +151,17 @@ $loggedIn = $http->post("https://api.mysite.com/v1/auth", [
  */
 
 function checkUserLoggedIn($username, $password) {
-    if (/* $username exists, but using social login */) {
-        // Setup SocialLogin as before... (see above)
-        $login = new SocialLogin($config, $storer, $password);
+    if (/* $user using social login */) {
+        $login = new SocialLogin($config, $storer);
+        $platform = $login->platformFromToken($token);
+        $token = $platform->stripPlatform($token);
+        $user = $platform->getUserFromToken($token);
+
+        if ($username === $user->id) {
+            return true;
+        }
+
+        return false;
     } else {
         // Login normally (e.g. check the password)
     }
