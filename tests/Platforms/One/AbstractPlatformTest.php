@@ -16,8 +16,11 @@ class AbstractPlatformTest extends TestCase
 {
     public function setUp()
     {
-        $this->tokenCredentials = Mockery::mock(TokenCredentials::class);
-        $this->temporaryCredentials = Mockery::mock(TemporaryCredentials::class);
+        $this->tokenCredentials = new TokenCredentials();
+        $this->tokenCredentials->setIdentifier("identifier");
+        $this->tokenCredentials->setSecret("secret");
+
+        $this->temporaryCredentials = new TemporaryCredentials();
 
         $this->mockServer = Mockery::mock(Server::class, [
             "getAuthorizationUrl" => "http://test.com/auth",
@@ -31,6 +34,7 @@ class AbstractPlatformTest extends TestCase
 
         $this->mockStorer = Mockery::mock(StorerInterface::class, [
             "store" => true,
+            "clear" => true,
         ]);
 
         $this->platform = (new TestPlatform($this->mockServer))->setStorer($this->mockStorer)->setSessionID(1);
@@ -41,23 +45,16 @@ class AbstractPlatformTest extends TestCase
         $this->assertEquals("http://test.com/auth", $this->platform->getAuthUrl());
     }
 
-    public function testAuthorizeUser()
+    public function testGetTokenFromCode()
     {
         $this->mockStorer->shouldReceive("get")->andReturn(serialize($this->temporaryCredentials));
-
-        $user = $this->platform->authorizeUser("token:verifier");
-
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals(1, $user->id);
-        $this->assertEquals("test@test.com", $user->email);
-        $this->assertEquals("test", $user->name);
-        $this->assertEquals("test", $user->other);
+        $token = $this->platform->getTokenFromCode("token:verifier");
+        $this->assertEquals("identifier:secret", $token);
     }
 
-    public function testGetUser()
+    public function testGetUserFromToken()
     {
-        $this->mockStorer->shouldReceive("get")->andReturn(serialize($this->tokenCredentials));
-        $user = $this->platform->getUser(1);
+        $user = $this->platform->getUserFromToken("identifier:secret");
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals(1, $user->id);

@@ -3,6 +3,7 @@
 namespace SmallHadronCollider\SocialLogin\Platforms\Two;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Token\AccessToken;
 
 use SmallHadronCollider\SocialLogin\Platforms\AbstractPlatform as Platform;
 use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
@@ -27,38 +28,34 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         return $authURL;
     }
 
-    public function authorizeUser($code)
+    public function getTokenFromCode($code)
     {
         $this->checkSessionID();
 
         list($code, $state) = explode(":", $code);
 
-        $cachedState = $this->storer->get("{$this->platform}.{$this->sessionID}.temporary");
+        // Get temporary credentials from storage
+        $key = "{$this->platform}.{$this->sessionID}.temporary";
+        $cachedState = $this->storer->get($key);
 
         if ($cachedState !== $state) {
             throw new InvalidAuthCodeException();
         }
 
+        // Clear temporary credentials
+        $this->storer->clear($key);
+
         $accessToken = $this->provider->getAccessToken("authorization_code", [
             "code" => $code,
         ]);
 
-        $this->storeAccessToken($accessToken);
-
-        return $this->createUser($accessToken);
+        return "{$accessToken->getToken()}";
     }
 
-    public function getUser($userID)
+    public function getUserFromToken($token)
     {
-        $accessToken = unserialize($this->storer->get("{$this->platform}.{$userID}"));
+        $accessToken = new AccessToken(["access_token" => $token]);
         return $this->createUser($accessToken);
-    }
-
-    protected function storeAccessToken($accessToken)
-    {
-        $resourceOwner = $this->provider->getResourceOwner($accessToken);
-        $userID = $this->getUserID($resourceOwner);
-        $this->storer->store("{$this->platform}.{$userID}", serialize($accessToken));
     }
 
     protected function createUser($accessToken)

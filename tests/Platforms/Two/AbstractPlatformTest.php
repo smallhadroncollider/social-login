@@ -15,7 +15,7 @@ class AbstractPlatformTest extends TestCase
 {
     public function setUp()
     {
-        $this->accessToken = Mockery::mock(AccessToken::class);
+        $this->accessToken = new AccessToken(["access_token" => "accesstoken"]);
 
         $this->mockProvider = Mockery::mock(AbstractProvider::class, [
             "getAuthorizationUrl" => "http://test.com/auth",
@@ -31,6 +31,7 @@ class AbstractPlatformTest extends TestCase
 
         $this->mockStorer = Mockery::mock(StorerInterface::class, [
             "store" => true,
+            "clear" => true,
         ]);
 
         $this->platform = (new TestPlatform($this->mockProvider))->setStorer($this->mockStorer)->setSessionID(1);
@@ -44,13 +45,8 @@ class AbstractPlatformTest extends TestCase
     public function testAuthorizeUser()
     {
         $this->mockStorer->shouldReceive("get")->andReturn("state");
-        $user = $this->platform->authorizeUser("code:state");
-
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals(1, $user->id);
-        $this->assertEquals("test@test.com", $user->email);
-        $this->assertEquals("test", $user->name);
-        $this->assertEquals("test", $user->other);
+        $token = $this->platform->getTokenFromCode("code:state");
+        $this->assertEquals("accesstoken", $token);
     }
 
     /**
@@ -59,14 +55,12 @@ class AbstractPlatformTest extends TestCase
     public function testAuthorizeUserInvalidState()
     {
         $this->mockStorer->shouldReceive("get")->andReturn("incorrect");
-        $this->platform->authorizeUser("code:state");
+        $this->platform->getTokenFromCode("code:state");
     }
 
     public function testGetUser()
     {
-        $this->mockStorer->shouldReceive("get")->andReturn(serialize($this->accessToken));
-
-        $user = $this->platform->getUser(1);
+        $user = $this->platform->getUserFromToken("accesstoken");
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals(1, $user->id);

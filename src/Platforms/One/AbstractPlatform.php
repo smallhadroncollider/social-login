@@ -3,6 +3,8 @@
 namespace SmallHadronCollider\SocialLogin\Platforms\One;
 
 use League\OAuth1\Client\Server\Server;
+use League\OAuth1\Client\Credentials\TokenCredentials;
+
 use SmallHadronCollider\SocialLogin\Platforms\AbstractPlatform as Platform;
 use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\User;
@@ -25,29 +27,29 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         return $this->server->getAuthorizationUrl($temporaryIdentifier);
     }
 
-    public function authorizeUser($code)
+    public function getTokenFromCode($code)
     {
         $this->checkSessionID();
 
         list($token, $verifier) = explode(":", $code);
-        $temporaryCredentials = unserialize($this->storer->get("{$this->platform}.{$this->sessionID}.temporary"));
+
+        $key = "{$this->platform}.{$this->sessionID}.temporary";
+        $temporaryCredentials = unserialize($this->storer->get($key));
         $tokenCredentials = $this->server->getTokenCredentials($temporaryCredentials, $token, $verifier);
 
-        $this->storeTokenCredentials($tokenCredentials);
-
-        return $this->createUser($tokenCredentials);
+        $this->storer->clear($key);
+        return "{$tokenCredentials->getIdentifier()}:{$tokenCredentials->getSecret()}";
     }
 
-    public function getUser($userID)
+    public function getUserFromToken($token)
     {
-        $tokenCredentials = unserialize($this->storer->get("{$this->platform}.{$userID}"));
-        return $this->createUser($tokenCredentials);
-    }
+        list($identifier, $secret) = explode(":", $token);
 
-    protected function storeTokenCredentials($tokenCredentials)
-    {
-        $userID = $this->server->getUserUid($tokenCredentials);
-        $this->storer->store("{$this->platform}.{$userID}", serialize($tokenCredentials));
+        $tokenCredentials = new TokenCredentials();
+        $tokenCredentials->setIdentifier($identifier);
+        $tokenCredentials->setSecret($secret);
+
+        return $this->createUser($tokenCredentials);
     }
 
     protected function createUser($tokenCredentials)
