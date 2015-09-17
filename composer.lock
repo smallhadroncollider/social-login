@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0e9251aac5c48f4ce01240a0aad5e253",
+    "hash": "2d0e845610616843f86fb9a536e9a39a",
     "packages": [
         {
             "name": "guzzle/guzzle",
@@ -495,16 +495,16 @@
         },
         {
             "name": "league/oauth2-facebook",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-facebook.git",
-                "reference": "ba1274fb9c5628d0d317a6746776e566be662f91"
+                "reference": "0cd44ead57f05f7b8b728dcbf20bab1b56990718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-facebook/zipball/ba1274fb9c5628d0d317a6746776e566be662f91",
-                "reference": "ba1274fb9c5628d0d317a6746776e566be662f91",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-facebook/zipball/0cd44ead57f05f7b8b728dcbf20bab1b56990718",
+                "reference": "0cd44ead57f05f7b8b728dcbf20bab1b56990718",
                 "shasum": ""
             },
             "require": {
@@ -542,7 +542,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2015-08-20 22:11:24"
+            "time": "2015-09-16 22:00:46"
         },
         {
             "name": "psr/http-message",
@@ -769,6 +769,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.5.0"
+    },
     "platform-dev": []
 }
