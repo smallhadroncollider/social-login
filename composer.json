@@ -1,11 +1,15 @@
 {
-	"name": "social-login",
-	"description": "Social Login Provider",
-	"type": "project",
+	"name": "smallhadroncollider/social-login",
+	"description": "A package to make Social Login easier for API-centric PHP applications",
+    "keywords": ["social", "login", "oauth", "auth", "oauth1", "oauth2", "twitter", "facebook"],
 	"require": {
+        "php": ">=5.5.0",
 		"league/oauth1-client": "~1.6",
 		"league/oauth2-client": "~1.0",
 		"league/oauth2-facebook": "~1.0"
+	},
+	"require-dev": {
+		"mockery/mockery": "0.9.*"
 	},
     "autoload": {
         "psr-4": {
@@ -15,8 +19,5 @@
     },
 	"config": {
 		"preferred-install": "dist"
-	},
-	"require-dev": {
-		"mockery/mockery": "0.9.*"
 	}
 }
