@@ -1,6 +1,6 @@
 # Social Login
 
-[![Version](https://img.shields.io/packagist/v/smallhadroncollider/social-login.png?style=flat)](https://packagist.org/packages/smallhadroncollider/social-login) [![Build Status](https://img.shields.io/travis/smallhadroncollider/social-login.jpg?style=flat)](https://travis-ci.org/smallhadroncollider/social-login)
+[![Version](https://img.shields.io/packagist/v/smallhadroncollider/social-login.png?style=flat)](http://badge.fury.io/gh/smallhadroncollider%2Fsocial-login) [![Build Status](https://travis-ci.org/smallhadroncollider/social-login.svg)](https://travis-ci.org/smallhadroncollider/social-login)
 
 [Laravel Socialite](https://github.com/laravel/socialite) is great. But it wasn't created with [API-centric](http://code.tutsplus.com/tutorials/creating-an-api-centric-web-application--net-23417) PHP apps in mind: it relies on sessions (which a stateless API will lack) and specific `GET` parameters (which may not be desirable).
 
