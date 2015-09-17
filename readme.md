@@ -93,7 +93,7 @@ $code = $_POST["code"];
 
 $platform = $login->platform($_POST["platform"]);
 $token = $platform->getTokenFromCode($code);
-$user = $platform->getTokenFromCode($code);
+$user = $platform->getUserFromToken($code);
 ```
 
 - **API**: Check if user exists in user database
