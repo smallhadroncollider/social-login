@@ -1,6 +1,6 @@
 <?php
 
-namespace SmallHadronCollider\SocialLogin\Providers\Laravel;
+namespace SmallHadronCollider\SocialLogin\Storers\Laravel;
 
 use Cache;
 use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
