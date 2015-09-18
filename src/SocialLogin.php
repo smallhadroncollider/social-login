@@ -9,6 +9,15 @@ use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 
 class SocialLogin
 {
+    public static function supportedPlatforms()
+    {
+        return [
+            "facebook",
+            "twitter",
+            "linkedin",
+        ];
+    }
+
     private $platforms = [];
 
     public function __construct(
@@ -17,6 +26,10 @@ class SocialLogin
     ) {
         if (array_key_exists("facebook", $config)) {
             $this->platforms["facebook"] = $this->getFacebookPlatform($config["facebook"]);
+        }
+
+        if (array_key_exists("linkedin", $config)) {
+            $this->platforms["linkedin"] = $this->getLinkedInPlatform($config["linkedin"]);
         }
 
         if (array_key_exists("twitter", $config)) {
@@ -64,6 +77,11 @@ class SocialLogin
     private function getFacebookPlatform($config)
     {
         return new Two\FacebookPlatform($config);
+    }
+
+    private function getLinkedInPlatform($config)
+    {
+        return new Two\LinkedInPlatform($config);
     }
 
     private function getTwitterPlatform($config)

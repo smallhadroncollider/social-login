@@ -1,6 +1,6 @@
 # Social Login
 
-[![Build Status](https://travis-ci.org/smallhadroncollider/social-login.svg?branch=develop)](https://travis-ci.org/smallhadroncollider/social-login)
+[![Version](https://img.shields.io/packagist/v/smallhadroncollider/social-login.png?style=flat)](http://badge.fury.io/gh/smallhadroncollider%2Fsocial-login) [![Build Status](https://travis-ci.org/smallhadroncollider/social-login.svg)](https://travis-ci.org/smallhadroncollider/social-login)
 
 [Laravel Socialite](https://github.com/laravel/socialite) is great. But it wasn't created with [API-centric](http://code.tutsplus.com/tutorials/creating-an-api-centric-web-application--net-23417) PHP apps in mind: it relies on sessions (which a stateless API will lack) and specific `GET` parameters (which may not be desirable).
 
@@ -93,7 +93,7 @@ $code = $_POST["code"];
 
 $platform = $login->platform($_POST["platform"]);
 $token = $platform->getTokenFromCode($code);
-$user = $platform->getTokenFromCode($code);
+$user = $platform->getUserFromToken($code);
 ```
 
 - **API**: Check if user exists in user database
@@ -167,3 +167,27 @@ function checkUserLoggedIn($username, $password) {
     }
 }
 ```
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Small Hadron Collider
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

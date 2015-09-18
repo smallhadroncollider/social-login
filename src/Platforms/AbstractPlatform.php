@@ -24,6 +24,11 @@ abstract class AbstractPlatform
         return $this;
     }
 
+    public function name()
+    {
+        return $this->platform;
+    }
+
     public function addPlatform($token)
     {
         return "{$this->platform}:{$token}";

@@ -13,6 +13,7 @@ use SmallHadronCollider\SocialLogin\User;
 abstract class AbstractPlatform extends Platform implements PlatformInterface
 {
     public $provider;
+    protected $authUrlOptions = [];
 
     public function __construct(AbstractProvider $provider)
     {
@@ -23,7 +24,7 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
     {
         $this->checkSessionID();
 
-        $authURL = $this->provider->getAuthorizationUrl();
+        $authURL = $this->provider->getAuthorizationUrl($this->authUrlOptions);
         $this->storer->store("{$this->platform}.{$this->sessionID}.temporary", $this->provider->getState());
         return $authURL;
     }
@@ -71,7 +72,15 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
         return $user;
     }
 
-    abstract protected function getUserID($resourceOwner);
+    protected function getUserID($resourceOwner)
+    {
+        return $resourceOwner->getId();
+    }
+
+    protected function getUserEmail($resourceOwner)
+    {
+        return $resourceOwner->getEmail();
+    }
+
     abstract protected function getUserName($resourceOwner);
-    abstract protected function getUserEmail($resourceOwner);
 }
