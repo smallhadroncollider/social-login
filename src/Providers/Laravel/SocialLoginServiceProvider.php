@@ -17,7 +17,7 @@ class SocialLoginServiceProvider extends ServiceProvider
         $storer = new CacheStorer("social_login." . $this->app->environment());
         $config = [];
 
-        foreach (SocialLogin::$supported as $platform) {
+        foreach (SocialLogin::supportedPlatforms() as $platform) {
             $service = Config::get("services.{$platform}");
 
             if ($service) {
