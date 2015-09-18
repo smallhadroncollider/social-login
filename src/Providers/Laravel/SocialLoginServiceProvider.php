@@ -4,7 +4,9 @@ namespace SmallHadronCollider\SocialLogin\Providers\Laravel;
 
 use Config;
 use Illuminate\Support\ServiceProvider;
+
 use SmallHadronCollider\SocialLogin\SocialLogin;
+use SmallHadronCollider\SocialLogin\Storers\Laravel\CacheStorer;
 
 class SocialLoginServiceProvider extends ServiceProvider
 {
