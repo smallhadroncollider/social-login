@@ -9,6 +9,14 @@ use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 
 class SocialLogin
 {
+    public static function supportedPlatforms()
+    {
+        return [
+            "facebook",
+            "twitter"
+        ];
+    }
+
     private $platforms = [];
 
     public function __construct(
