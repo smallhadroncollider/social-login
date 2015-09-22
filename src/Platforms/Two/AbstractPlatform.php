@@ -33,7 +33,13 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
     {
         $this->checkSessionID();
 
-        list($code, $state) = explode(":", $code);
+        $parts = explode(":", $code);
+
+        if (count($parts) !== 2) {
+            throw new InvalidAuthCodeException();
+        }
+
+        list($code, $state) = $parts;
 
         // Get temporary credentials from storage
         $key = "{$this->platform}.{$this->sessionID}.temporary";

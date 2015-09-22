@@ -42,7 +42,7 @@ class AbstractPlatformTest extends TestCase
         $this->assertEquals("http://test.com/auth", $this->platform->getAuthUrl());
     }
 
-    public function testAuthorizeUser()
+    public function testGetTokenFromCode()
     {
         $this->mockStorer->shouldReceive("get")->andReturn("state");
         $token = $this->platform->getTokenFromCode("code:state");
@@ -52,13 +52,21 @@ class AbstractPlatformTest extends TestCase
     /**
      * @expectedException SmallHadronCollider\SocialLogin\Exceptions\InvalidAuthCodeException
      */
-    public function testAuthorizeUserInvalidState()
+    public function testGetTokenFromCodeInvalidState()
     {
         $this->mockStorer->shouldReceive("get")->andReturn("incorrect");
         $this->platform->getTokenFromCode("code:state");
     }
 
-    public function testGetUser()
+    /**
+     * @expectedException SmallHadronCollider\SocialLogin\Exceptions\InvalidAuthCodeException
+     */
+    public function testGetTokenFromCodeMissingState()
+    {
+        $this->platform->getTokenFromCode("codewithoutstate");
+    }
+
+    public function testGetUserFromToken()
     {
         $user = $this->platform->getUserFromToken("accesstoken");
 
