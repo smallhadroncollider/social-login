@@ -5,6 +5,7 @@ namespace SmallHadronCollider\SocialLogin\Platforms;
 use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 use SmallHadronCollider\SocialLogin\Exceptions\SessionIDNotSetException;
+use SmallHadronCollider\SocialLogin\Exceptions\InvalidTokenException;
 
 abstract class AbstractPlatform
 {
@@ -36,6 +37,10 @@ abstract class AbstractPlatform
 
     public function stripPlatform($token)
     {
+        if (!preg_match("/^{$this->platform}:/", $token)) {
+            throw new InvalidTokenException();
+        }
+
         return preg_replace("/^{$this->platform}:/", "", $token);
     }
 

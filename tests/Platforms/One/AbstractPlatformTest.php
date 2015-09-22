@@ -52,6 +52,14 @@ class AbstractPlatformTest extends TestCase
         $this->assertEquals("identifier:secret", $token);
     }
 
+    /**
+     * @expectedException SmallHadronCollider\SocialLogin\Exceptions\InvalidAuthCodeException
+     */
+    public function testGetTokenFromCodeMissingSecret()
+    {
+        $this->platform->getTokenFromCode("identifierwithoutsecret");
+    }
+
     public function testGetUserFromToken()
     {
         $user = $this->platform->getUserFromToken("identifier:secret");
@@ -61,6 +69,14 @@ class AbstractPlatformTest extends TestCase
         $this->assertEquals("test@test.com", $user->email);
         $this->assertEquals("test", $user->name);
         $this->assertEquals("test", $user->other);
+    }
+
+    /**
+     * @expectedException SmallHadronCollider\SocialLogin\Exceptions\InvalidTokenException
+     */
+    public function testGetUserFromTokenMissingSecret()
+    {
+        $this->platform->getUserFromToken("identifierwithoutsecret");
     }
 }
 

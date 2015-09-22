@@ -9,6 +9,9 @@ use SmallHadronCollider\SocialLogin\Platforms\AbstractPlatform as Platform;
 use SmallHadronCollider\SocialLogin\Contracts\PlatformInterface;
 use SmallHadronCollider\SocialLogin\User;
 
+use SmallHadronCollider\SocialLogin\Exceptions\InvalidAuthCodeException;
+use SmallHadronCollider\SocialLogin\Exceptions\InvalidTokenException;
+
 abstract class AbstractPlatform extends Platform implements PlatformInterface
 {
     protected $server;
@@ -31,7 +34,13 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
     {
         $this->checkSessionID();
 
-        list($token, $verifier) = explode(":", $code);
+        $parts = explode(":", $code);
+
+        if (count($parts) !== 2) {
+            throw new InvalidAuthCodeException();
+        }
+
+        list($token, $verifier) = $parts;
 
         $key = "{$this->platform}.{$this->sessionID}.temporary";
         $temporaryCredentials = unserialize($this->storer->get($key));
@@ -43,7 +52,13 @@ abstract class AbstractPlatform extends Platform implements PlatformInterface
 
     public function getUserFromToken($token)
     {
-        list($identifier, $secret) = explode(":", $token);
+        $parts = explode(":", $token);
+
+        if (count($parts) !== 2) {
+            throw new InvalidTokenException();
+        }
+
+        list($identifier, $secret) = $parts;
 
         $tokenCredentials = new TokenCredentials();
         $tokenCredentials->setIdentifier($identifier);

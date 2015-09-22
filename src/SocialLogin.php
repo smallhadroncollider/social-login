@@ -5,6 +5,7 @@ namespace SmallHadronCollider\SocialLogin;
 use SmallHadronCollider\SocialLogin\Platforms\One;
 use SmallHadronCollider\SocialLogin\Platforms\Two;
 use SmallHadronCollider\SocialLogin\Exceptions\InvalidPlatformException;
+use SmallHadronCollider\SocialLogin\Exceptions\InvalidTokenException;
 use SmallHadronCollider\SocialLogin\Contracts\StorerInterface;
 
 class SocialLogin
@@ -61,7 +62,10 @@ class SocialLogin
 
     public function platformFromToken($token)
     {
-        preg_match("/^([a-z]+):/", $token, $matches);
+        if (!preg_match("/^([a-z]+):/", $token, $matches)) {
+            throw new InvalidTokenException();
+        }
+
         $platform = $matches[1];
 
         return $this->platform($platform);
